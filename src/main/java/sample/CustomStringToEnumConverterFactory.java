@@ -1,0 +1,27 @@
+package sample;
+
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.converter.ConverterFactory;
+
+class CustomStringToEnumConverterFactory implements ConverterFactory<String, EnumBase> {
+    @Override
+    public <T extends EnumBase> Converter<String, T> getConverter(Class<T> targetType) {
+        return new CustomStringToEnumConverter(targetType);
+    }
+
+    private static class CustomStringToEnumConverter<T extends EnumBase> implements Converter<String, T> {
+        private Class<T> enumType;
+
+        CustomStringToEnumConverter(Class<T> enumType) {
+            this.enumType = enumType;
+        }
+
+        @Override
+        public T convert(String source) {
+            if (source.isEmpty()) {
+                return null;
+            }
+            return EnumBase.of(enumType, source.trim());
+        }
+    }
+}
