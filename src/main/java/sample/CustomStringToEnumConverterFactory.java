@@ -4,11 +4,12 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
 
 class CustomStringToEnumConverterFactory implements ConverterFactory<String, EnumBase> {
-    @Override
+    @Override // 1. `StringToEnumConverterFactory`では`<T extends Enum>`となっているが、`EnumBase`を継承したクラスをGenericsに指定する
     public <T extends EnumBase> Converter<String, T> getConverter(Class<T> targetType) {
         return new CustomStringToEnumConverter(targetType);
     }
 
+    // 2. `StringToEnumConverter`では`<T extends Enum>`となっているが、ここも`EnumBase`を継承したクラスをGenericsに指定する
     private static class CustomStringToEnumConverter<T extends EnumBase> implements Converter<String, T> {
         private Class<T> enumType;
 
